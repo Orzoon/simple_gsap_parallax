@@ -31,6 +31,7 @@ function watch(){
 
     gulp.watch("./sass/**.SCSS", css)
     gulp.watch("./index.pug", html)
+    gulp.watch("./subpug/**.pug", html)
     gulp.watch("./index.html").on("change", browserSync.reload)
     gulp.watch("./js/index.js").on("change", browserSync.reload)
 
