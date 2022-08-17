@@ -7,7 +7,7 @@ window.addEventListener("load", (e) => {
     })
     const logoText = document.querySelectorAll(".dawn");
     // const offTop = [30,50,70,120,150,160,190,190,200,210,300];
-    const offTop = [-40,30,80,120,150,160,190,190,200,290,300];
+    let offTop = [-40,30,80,120,150,160,190,190,200,290,300];
     const scrubTop = [1,2,1.5,1,1,1.5,1.5,1.8,2,2.5,3];
     // grabbing all svgTopImageContainers
     const con =document.querySelectorAll(".common_container");
@@ -16,8 +16,9 @@ window.addEventListener("load", (e) => {
     // landscapes
     const t2 = gsap.timeline({})
     const masterTimeline = gsap.timeline({delay: 0.3, onComplete: () => {
+        setRatioValue();
         clearStyles();
-        setScrolls()
+        setScrolls();
     }})
     masterTimeline.add(t2)
     masterTimeline.add(t1, "<1")
@@ -95,10 +96,11 @@ window.addEventListener("load", (e) => {
                     start: "top top",
                     end: "bottom top",
                     //scrub: scrubTop[index] ? scrubTop[index] : 1.5
-                    scrub: scrubTop[index] === "true" ? true : scrubTop[index]
+                    scrub: scrubTop[index] === "true" ? true : scrubTop[index],
+                    invalidateOnRefresh: true,
                 },
                 duration: 1,
-                y: offTop[index] ? -offTop[index] : 1,
+                y: () => (offTop[index] ? -offTop[index] : 1)
             })
         });
     }
@@ -108,5 +110,24 @@ window.addEventListener("load", (e) => {
         gapContainer.style.display = "block";
         //document.body.style.overflowY = "visible";
         //window.onscroll = function () { window.scrollTo(0, 0); };
-    }    
+    } 
+    
+    function setRatioValue(){
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        const ratio = w/h; 
+        console.log("ratio",ratio)
+        if(ratio < 0.7){
+            offTop = [60+90,90 +90,130+95,150+80,160+70,190+80,225+50,290,300,300,280];
+        }
+        else if(ratio < 0.9 ){
+            offTop.length = 0;
+            offTop = [30,90,130,150,160,190,225,230,240,260,230];
+        }
+        
+    }
+
+    ScrollTrigger.addEventListener("refreshInit", setRatioValue);
+   
+
 })
